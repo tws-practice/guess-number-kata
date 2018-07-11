@@ -2,7 +2,7 @@ package tw.core.generator;
 
 import org.junit.jupiter.api.Test;
 import tw.core.Answer;
-import tw.core.exception.OutOfRangeAnswerException;
+import tw.core.exception.AnswerFormatIncorrectException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -17,12 +17,12 @@ import static org.mockito.Mockito.when;
  */
 public class AnswerGeneratorTest {
     @Test()
-    public void should_throw_OutOfRangeAnswerException_which_is_not_between_0_and_9() throws OutOfRangeAnswerException {
+    public void should_throw_OutOfRangeAnswerException_which_is_not_between_0_and_9() {
         RandomIntGenerator randomIntGenerator = mock(RandomIntGenerator.class);
         when(randomIntGenerator.generateNums(anyInt(), anyInt())).thenReturn("1 2 3 10");
         AnswerGenerator answerGenerator = new AnswerGenerator(randomIntGenerator);
 
-        assertThrows(OutOfRangeAnswerException.class, answerGenerator::generate);
+        assertThrows(AnswerFormatIncorrectException.class, answerGenerator::generate);
 
     }
 

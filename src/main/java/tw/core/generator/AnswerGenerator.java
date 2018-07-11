@@ -2,7 +2,7 @@ package tw.core.generator;
 
 import com.google.inject.Inject;
 import tw.core.Answer;
-import tw.core.exception.OutOfRangeAnswerException;
+import tw.core.exception.AnswerFormatIncorrectException;
 
 /**
  * Created by jxzhong on 2017/5/17.
@@ -15,7 +15,7 @@ public class AnswerGenerator {
         this.randomIntGenerator = randomIntGenerator;
     }
 
-    public Answer generate() throws OutOfRangeAnswerException {
+    public Answer generate() throws AnswerFormatIncorrectException {
         String RandomNumStr = this.randomIntGenerator.generateNums(9, 4);
         Answer answer = Answer.createAnswer(RandomNumStr);
         answer.validate();

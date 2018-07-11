@@ -4,6 +4,7 @@ package tw.core;/*
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tw.core.exception.OutOfGuessCountException;
 import tw.core.generator.AnswerGenerator;
 import tw.core.model.GuessResult;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,7 +29,7 @@ public class GameTest {
     }
 
     @Test
-    public void should_get_record_of_every_guess_result_when_call_guessHistory() {
+    public void should_get_record_of_every_guess_result_when_call_guessHistory() throws OutOfGuessCountException {
         //given
         game.guess(Answer.createAnswer("2 1 6 7"));
         game.guess(Answer.createAnswer("1 2 3 4"));
@@ -104,9 +106,20 @@ public class GameTest {
     }
 
     @Test
+    public void should_throw_exception_when_call_guess_after_incorrect_guess_action_number_over_6() throws Exception {
+        //given
+        excuteSixErrorGuess();
+        //when
+        //then
+        assertThrows(Exception.class, this::excuteSuccessGuess);
+
+    }
+
+    @Test
     public void should_get_false_when_correct_guess() throws Exception {
         //given
-        excuteSuccessGuess();
+        game.guess(Answer.createAnswer("1 5 3 4"));
+        game.guess(Answer.createAnswer("1 2 3 4"));
         //when
         Boolean isContinue = game.checkCoutinue();
         //then
@@ -114,18 +127,17 @@ public class GameTest {
 
     }
 
-    private void excuteSuccessGuess() {
-        game.guess(Answer.createAnswer("5 2 7 4"));
+    private void excuteSuccessGuess() throws OutOfGuessCountException {
         game.guess(Answer.createAnswer("1 2 3 4"));
     }
 
-    private void excuteErrorGuessLessThanSixTimes() {
+    private void excuteErrorGuessLessThanSixTimes() throws OutOfGuessCountException {
         game.guess(Answer.createAnswer("2 7 3 4"));
         game.guess(Answer.createAnswer("1 5 3 4"));
         game.guess(Answer.createAnswer("1 8 2 1"));
     }
 
-    private void excuteSixErrorGuess() {
+    private void excuteSixErrorGuess() throws OutOfGuessCountException {
         game.guess(Answer.createAnswer("2 9 3 4"));
         game.guess(Answer.createAnswer("1 5 3 4"));
         game.guess(Answer.createAnswer("1 8 2 1"));

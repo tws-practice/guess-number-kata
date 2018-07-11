@@ -1,7 +1,8 @@
 package tw.core;
 
 import com.google.inject.Inject;
-import tw.core.exception.OutOfRangeAnswerException;
+import tw.core.exception.AnswerFormatIncorrectException;
+import tw.core.exception.OutOfGuessCountException;
 import tw.core.generator.AnswerGenerator;
 import tw.core.model.GuessResult;
 
@@ -23,12 +24,15 @@ public class Game {
     private final String CORRECT_RESULT_STANDAR = "4A0B";
 
     @Inject
-    public Game(AnswerGenerator answerGenerator) throws OutOfRangeAnswerException {
+    public Game(AnswerGenerator answerGenerator) throws AnswerFormatIncorrectException {
         this.actualAnswer = answerGenerator.generate();
         this.guessResults = new ArrayList();
     }
 
-    public GuessResult guess(Answer inputAnswer) {
+    public GuessResult guess(Answer inputAnswer) throws OutOfGuessCountException {
+        if (!checkCoutinue()) {
+            throw new OutOfGuessCountException("Guess count cant over 6!");
+        }
         final String result = actualAnswer.check(inputAnswer).getValue();
         GuessResult guessResult = new GuessResult(result, inputAnswer);
         guessResults.add(guessResult);
@@ -40,7 +44,7 @@ public class Game {
     }
 
     public boolean checkCoutinue() {
-        return this.checkStatus() == CONTINUE;
+        return this.checkStatus().equals(CONTINUE);
     }
 
     public String checkStatus() {

@@ -1,6 +1,6 @@
 package tw.core;
 
-import tw.core.exception.OutOfRangeAnswerException;
+import tw.core.exception.AnswerFormatIncorrectException;
 import tw.core.model.Record;
 
 import java.util.Arrays;
@@ -27,13 +27,13 @@ public class Answer {
         return answer;
     }
 
-    public void validate() throws OutOfRangeAnswerException {
+    public void validate() throws AnswerFormatIncorrectException {
         long validatedNum = numList.stream()
                 .map(num -> parseInt(num))
                 .distinct()
                 .filter(num -> num < 10).count();
         if (validatedNum < numList.size()) {
-            throw new OutOfRangeAnswerException("Answer format is incorrect");
+            throw new AnswerFormatIncorrectException("Answer format is incorrect");
         }
     }
 
