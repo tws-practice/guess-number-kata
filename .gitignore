@@ -1,0 +1,11 @@
+.git
+.gradle
+.DS_Store
+tdd-java-base.*
+build
+out
+.classpath
+.project
+.settings/
+.vscode/
+bin/
